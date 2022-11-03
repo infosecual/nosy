@@ -19,7 +19,7 @@ var FuzzFunctions []string
 func print_help_menu() {
 	fmt.Println("Please provide an action and a target YAML file")
 	fmt.Println("Actions:")
-	fmt.Println("\t--init\t\t\tintialize a target environmnet")
+	fmt.Println("\t--init\t\t\tinitialize a target environment")
 	fmt.Println("\t--generate-harness\tgenerate fuzz harnesses for the target")
 	fmt.Println("\t--fuzz\t\t\tfuzz the target")
 	fmt.Println("")
@@ -27,7 +27,7 @@ func print_help_menu() {
 	fmt.Println("\t# This will download the target repo")
 	fmt.Println("\tgo run . --init target_configs/example_source.yaml")
 	fmt.Println("")
-	fmt.Println("\t# This will parse the target source and gerenate")
+	fmt.Println("\t# This will parse the target source and generate")
 	fmt.Println("\t# the fuzz harnesses")
 	fmt.Println("\tgo run . --generate-harness target_configs/example_source.yaml")
 	fmt.Println("")
@@ -50,7 +50,7 @@ func generate_harness_gen_script(output_dir string) {
 
 	script += fmt.Sprintf("%s run /src/cmd/parse-package/*.go\n", TargetConfig.TargetGoVersion)
 
-	// write the script to the atargets /src dir
+	// write the script to the targets /src dir
 	f, err := os.Create(fmt.Sprintf("%s/gen_harness.sh", output_dir))
 	if err != nil {
 		log.Fatal(err)
@@ -83,7 +83,7 @@ func copy_source_parsers_and_configs(target_dir string) {
 }
 
 func generate_init_script(target_dir string) {
-	fmt.Println("\nGeneratng target's initilization script:")
+	fmt.Println("\nGenerating target's initialization script:")
 	fmt.Println()
 	script := fmt.Sprintf("REPO_URL=\"%s\"\n", TargetConfig.TargetRepoURL)
 	script += fmt.Sprintf("BRANCH=\"%s\"\n", TargetConfig.TargetRepoBranch)
@@ -97,7 +97,7 @@ cd /go/src/$REPO_PREFIX
 go get -t -d ./...
 cp /go /staging -rp
 # this is an interesting way to get around the fact that we cannot add our
-# harness into the intialized target repo because its perms are restrictive
+# harness into the initialized target repo because its perms are restrictive
 # to root:root (we make a user and group with your name in the container,
 # chown everything to it)
 groupadd user
@@ -149,7 +149,7 @@ func exec_and_print(command string) {
 
 // --init will download and initialize the target repo to fuzz
 func init_target() {
-	fmt.Println("Initalizing target repo...")
+	fmt.Println("Initializing target repo...")
 	fmt.Println("\tName: ", TargetConfig.TargetRepo)
 	fmt.Println("\tURL: ", TargetConfig.TargetRepoURL)
 	fmt.Println("\tBranch: ", TargetConfig.TargetRepoBranch)
@@ -176,7 +176,7 @@ func init_target() {
 	if _, err := os.Stat(target_dir); !os.IsNotExist(err) {
 		fmt.Println("Target directory already exists, removing it...")
 		//fmt.Printf("Please run:\n\tsudo rm -rf %s\n", target_dir)
-		//log.Fatal("Please remove the previous directory before initilizing a new target.")
+		//log.Fatal("Please remove the previous directory before initializing a new target.")
 		command = fmt.Sprintf("rm -rf %s", target_dir)
 		exec_and_print(command)
 	}
@@ -190,8 +190,8 @@ func init_target() {
 	// generate and populate target's init script in the targets asset folder
 	generate_init_script(target_dir)
 
-	// run a the initilization scripts in the target container
-	fmt.Println("\nRunning initilization scripts in target container...")
+	// run a the initialization scripts in the target container
+	fmt.Println("\nRunning initialization scripts in target container...")
 	fmt.Println()
 	command = fmt.Sprintf("docker run -v %s:/staging nosy-neighbor /staging/init_target.sh", target_dir)
 	exec_and_print(command)

@@ -1,7 +1,7 @@
 package main
 
 // This is made to be compiled via "go build ." and used as a standalone
-// executable. This is done to take advantage of the directory dependancies
+// executable. This is done to take advantage of the directory dependencies
 // of the go build system and its corresponding packages library.
 
 import (

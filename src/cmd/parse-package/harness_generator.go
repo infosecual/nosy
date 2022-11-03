@@ -1,7 +1,7 @@
 package main
 
 // This is made to be compiled via "go build ." and used as a standalone
-// executable. This is done to take advantage of the directory dependancies
+// executable. This is done to take advantage of the directory dependencies
 // of the go build system and its corresponding packages library.
 
 import (
@@ -37,7 +37,7 @@ type ctorMatch struct {
 	secondResultIsErr bool
 }
 
-// argRep provides the string reperestation of a argument to the fuzz wrapper generator
+// argRep provides the string representation of a argument to the fuzz wrapper generator
 type argRep struct {
 	argName string
 	argType string
@@ -74,7 +74,7 @@ func stripPointers(t types.Type, depth int) types.Type {
 	return stripPointers(u.Elem(), depth)
 }
 
-// checkArgTypesSupport reports the level of support across tareget
+// checkArgTypesSupport reports the level of support across target
 // function arguments.
 func checkArgTypesSupport(allWrapperParams []*types.Var) (paramSupport, string) {
 	res := unknown
@@ -95,7 +95,7 @@ func checkArgTypesSupport(allWrapperParams []*types.Var) (paramSupport, string) 
 		t = stripPointers(t, 0)
 		if t != v.Type() {
 			// Stripped at least one pointer. Mark that we will need to fill *if* the other checks also pass,
-			// but we know our best case is to fill (thoug we might also mark noSupport down below after the other checks).
+			// but we know our best case is to fill (though we might also mark noSupport down below after the other checks).
 			res = min(fillRequired, res)
 		}
 
@@ -194,7 +194,7 @@ func emitWrappedFunc(emit emitFunc, f *types.Func, wrappedSig *types.Signature, 
 // emitNilChecks emits checks for nil for our input parameters.
 // Always crashing on a nil receiver is not particularly interesting, so emit the code to avoid.
 // Also check if we have any other pointer parameters.
-// A user can decide to delete if they want to test nil recivers or nil parameters.
+// A user can decide to delete if they want to test nil receivers or nil parameters.
 // Also, could have a flag to disable.
 func emitNilChecks(emit emitFunc, allParams []*types.Var, localPkg *types.Package) {
 	foundPointer := false
@@ -219,7 +219,7 @@ func emitNilChecks(emit emitFunc, allParams []*types.Var, localPkg *types.Packag
 	}
 }
 
-// avoidCollision takes a variable (which might correpsond to a parameter or argument),
+// avoidCollision takes a variable (which might correspond to a parameter or argument),
 // and returns a non-colliding name, or the original name, based on
 // whether or not it collided with package name or other with parameters.
 func avoidCollision(v *types.Var, i int, localPkg *types.Package, allWrapperParams []*types.Var) string {
@@ -252,7 +252,7 @@ func avoidCollision(v *types.Var, i int, localPkg *types.Package, allWrapperPara
 		}
 	}
 	if collision {
-		// TODO: could check again to see if this also collisde,
+		// TODO: could check again to see if this also collide,
 		// but maybe find an example where it matters first (no examples across 3K+ stdlib funcs).
 		paramName = fmt.Sprintf("%s%d", string([]rune(paramName)[0]), i+1)
 	}
@@ -440,7 +440,7 @@ func constructorMatch(recv *types.Var, possibleCtor TargetFunction) (ctorMatch, 
 
 	// TODO: this is old & very early code... is there some reason we can't compare types.Var.Type() more directly?
 	// TODO (old): types.Identical wasn't working as expected. Imperfect fall back for now.
-	// types.TypeString(recvN, nil) returns a fully exanded string that includes the import path, e.g.,:
+	// types.TypeString(recvN, nil) returns a fully expanded string that includes the import path, e.g.,:
 	//   github.com/thepudds/fzgo/genfuzzfuncs/examples/test-constructor-injection.A
 	if types.TypeString(recvN, nil) == types.TypeString(ctorResultN, nil) {
 		// we found a match between this constructor's return type and the receiver type

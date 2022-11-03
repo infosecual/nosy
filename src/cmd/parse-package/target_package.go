@@ -34,7 +34,7 @@ func NewTargetPackage(name string, real_path string, target_config TargetRepoCon
 		ImportPath: trimmed_path}
 }
 
-// returns a trunicated hash of the import path for uniqueness
+// returns a truncated hash of the import path for uniqueness
 func (pkg TargetPackage) UniqueID() string {
 	unique_id := sha256.Sum256([]byte(pkg.ImportPath))
 	return hex.EncodeToString(unique_id[:4])

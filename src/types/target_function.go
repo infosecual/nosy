@@ -150,7 +150,7 @@ func (f TargetFunction) IsIncludable(target_config TargetRepoConfig) bool {
 
 	// if the function name does not start with a capital letter than it is
 	// not exported so do not fuzz it it may be desireable to work around this
-	// with the same package name delcared in the future
+	// with the same package name declared in the future
 	//if unicode.IsLower(rune(f.Name[0])) {
 	//	return false
 	//}

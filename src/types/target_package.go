@@ -29,7 +29,7 @@ func NewTargetPackage(name string, real_path string, target_config TargetRepoCon
 		ImportPath: trimmed_path}
 }
 
-// returns a trunicated hash of the import path for uniqueness
+// returns a truncated hash of the import path for uniqueness
 func (pkg TargetPackage) UniqueID() string {
 	unique_id := sha256.Sum256([]byte(pkg.ImportPath))
 	return hex.EncodeToString(unique_id[:4])
@@ -71,7 +71,7 @@ func (pkg TargetPackage) IsIncludable(target_config TargetRepoConfig) bool {
 	//    return false
 	//}
 
-	// return false unless there is at least one includable function in the
+	// return false unless there is at least one inculpable function in the
 	// package
 	for _, function := range pkg.TargetFunctions {
 		if function.IsIncludable(target_config) {
