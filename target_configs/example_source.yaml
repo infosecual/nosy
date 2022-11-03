@@ -1,13 +1,13 @@
 ---
- target_repo_name: nosy-example
- target_repo_url: https://github.com/infosecual/nosy-example.git
+ target_repo_name: nosy-v2-example
+ target_repo_url: https://github.com/infosecual/nosy-v2-example.git
  
  # this is used in harness generation for go imports
  # it is usually the git repo without the https prefix
- target_repo_import_prefix: github.com/infosecual/nosy-example
+ target_repo_import_prefix: github.com/infosecual/nosy-v2-example
  
  # this is what is declared in the first line of the target's go.mode file
- target_mod_self_declaration: github.com/infosecual/nosy-example
+ target_mod_self_declaration: github.com/infosecual/nosy-v2-example
  target_repo_branch: main
  
  # use "go" for latest
