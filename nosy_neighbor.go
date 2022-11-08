@@ -115,6 +115,35 @@ chmod -R u+w /staging
 	f.Close()
 }
 
+func generate_fuzz_scripts(target_dir string, docker_repo_path string) []string {
+	fmt.Println("\nGenerating target's fuzzing scripts:")
+	fmt.Println()
+
+	var scripts []string
+	seconds := TargetConfig.TestTimeSeconds
+	for i := 0; i < len(FuzzFunctions)/2; i++ {
+		script := ""
+		script += fmt.Sprintf("echo \"Fuzzing function %s for %d seconds\"\n", FuzzFunctions[2*i], seconds)
+		script += fmt.Sprintf("cd %s\n", FuzzFunctions[2*i+1])
+		script += fmt.Sprintf("%s test -fuzz=%s -fuzztime=%ds\n", TargetConfig.TargetGoVersion, FuzzFunctions[2*i], seconds)
+		script += fmt.Sprintf("if [ -d \"./testdata/fuzz\" ]; then\n")
+		script += fmt.Sprintf("\tmv ./testdata/fuzz/* %s/nosy_fuzz_dir/\n", docker_repo_path)
+		script += fmt.Sprintf("\trm -rf ./testdata/fuzz/*\n")
+		script += fmt.Sprintf("\techo \"cd %s && go test -run=%s/nosy_fuzz_dir/%s/.\"\n", FuzzFunctions[2*i+1], docker_repo_path, FuzzFunctions[2*i])
+		script += fmt.Sprintf("fi\n")
+		filename := fmt.Sprintf("%s/nosy_fuzz_dir/fuzz_%s.sh", target_dir, FuzzFunctions[2*i])
+		docker_relative_filename := fmt.Sprintf("fuzz_%s.sh", FuzzFunctions[2*i])
+		scripts = append(scripts, docker_relative_filename)
+		f, err := os.Create(filename)
+		if err != nil {
+			log.Fatal(err)
+		}
+		_, err = f.WriteString(script)
+		f.Close()
+	}
+	return scripts
+}
+
 func generate_fuzz_script(target_dir string, docker_repo_path string) {
 	fmt.Println("\nGenerating target's fuzzing script:")
 	fmt.Println()
@@ -274,14 +303,16 @@ func fuzz() {
 		log.Fatal(err)
 	}
 
-	generate_fuzz_script(local_repo_path, docker_repo_path)
+	scripts := generate_fuzz_scripts(local_repo_path, docker_repo_path)
 
 	fmt.Println("Fuzzing", len(FuzzFunctions)/2, "functions...")
 
-	fmt.Println("To begin fuzzing please run the following commands:")
-	fmt.Println()
-	fmt.Printf("docker run -it --workdir %s/nosy_fuzz_dir -v %s:/go nosy-neighbor\n", docker_repo_path, local_goroot_path)
-	fmt.Println("chmod 755 fuzz_target.sh && ./fuzz_target.sh | tee fuzzing.out")
+	for _, script := range scripts {
+		command := fmt.Sprintf("docker run --workdir %s/nosy_fuzz_dir -v %s:/go nosy-neighbor %s\n",
+			docker_repo_path, local_goroot_path, script)
+		exec_and_print(command)
+	}
+
 }
 
 func main() {
