@@ -227,11 +227,11 @@ func generate_fuzz_harnesses() {
 
 	fmt.Println()
 	fmt.Println("Source parsing dependencies have been added to the targets asset directory.")
-	fmt.Println("Please run the following command:\n")
-	fmt.Printf("docker run -it --workdir %s/ -v %s:/go -v %s:/src nosy-neighbor /src/gen_harness.sh\n",
+	fmt.Println("Running harness generation...")
+	command := fmt.Sprintf("docker run --workdir %s/ -v %s:/go -v %s:/src nosy-neighbor /src/gen_harness.sh\n",
 		docker_repo_path, local_goroot_path, local_src_path)
 	fmt.Println()
-
+	exec_and_print(command)
 }
 
 func fuzz() {
