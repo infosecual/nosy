@@ -25,15 +25,15 @@ func print_help_menu() {
 	fmt.Println("")
 	fmt.Println("Example usage:")
 	fmt.Println("\t# This will download the target repo")
-	fmt.Println("\tgo run . --init target_configs/example_source.yaml")
+	fmt.Println("\tgo run . --init example_source.yaml")
 	fmt.Println("")
 	fmt.Println("\t# This will parse the target source and generate")
 	fmt.Println("\t# the fuzz harnesses")
-	fmt.Println("\tgo run . --generate-harness target_configs/example_source.yaml")
+	fmt.Println("\tgo run . --generate-harness example_source.yaml")
 	fmt.Println("")
 	fmt.Println("\t# This will build the fuzzers and begin fuzzing the target")
 	fmt.Println("\t# in a docker container")
-	fmt.Println("\tgo run . --fuzz target_configs/example_source.yaml")
+	fmt.Println("\tgo run . --fuzz example_source.yaml")
 	fmt.Println("")
 }
 
