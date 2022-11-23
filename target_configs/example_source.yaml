@@ -3,7 +3,7 @@
  target_repo_url: https://github.com/infosecual/nosy-v2-example.git
  
  # this is used in harness generation for go imports
- # it is usually the git repo without the https prefix
+ # it is usually the git repo withought the https prefix
  target_repo_import_prefix: github.com/infosecual/nosy-v2-example
  
  # this is what is declared in the first line of the target's go.mode file
@@ -15,7 +15,7 @@
  # nosy-fuzzer.Dockerfile at the top directory of this repo
  go_version: go
 
- # these are various dependencies needed for harness generation
+ # these are various dependancies needed for harness generation
  # if you get go compile or go mod errors in the harness generation step add
  # the "go get" cli commands here to auto insert on the next run
  harness_gen_deps:
@@ -24,7 +24,7 @@
    - go get golang.org/x/tools/internal/gocommand
    - go get gopkg.in/yaml.v2
  # ignore declarations are ways to specify various functions, packages, or
- # types for Nosy to exclude when generating fuzzers
+ # types for Nosy to exlucde when gerenating fuzzers
  ignore_packages:
  ignore_functions:
  ignore_types:

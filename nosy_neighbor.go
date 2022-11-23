@@ -334,9 +334,15 @@ func fuzz() {
 	// Iterate through target functions, fix the GOROOT, fuzz the function,
 	// save the offending test cases
 	for _, script := range scripts {
-		command := fmt.Sprintf("docker run --workdir /scripts -v %s:/scripts -v %s:/go_backup -v %s:/cache -v %s:/results nosy-neighbor %s\n",
+
+		// prune docker containers tagged as nosy. This will prune all stopped containers!!!
+		cmd = "docker container prune -f"
+		exec_and_print(cmd)
+
+		//run the fuzz script
+		cmd = fmt.Sprintf("docker run --workdir /scripts -v %s:/scripts -v %s:/go_backup -v %s:/cache -v %s:/results nosy-neighbor %s\n",
 			asset_dir, local_goroot_path, local_cache_path, local_results_path, script)
-		exec_and_print(command)
+		exec_and_print(cmd)
 	}
 
 }
