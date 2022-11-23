@@ -162,7 +162,7 @@ func emitArgs(emit emitFunc, sig *types.Signature, collisionOffset int, localPkg
 		emit(paramName)
 	}
 	if sig.Variadic() {
-		// last argument needs an elipsis
+		// last argument needs an ellipsis
 		emit("...")
 	}
 }
@@ -625,7 +625,7 @@ func emitIndependentWrapper(emit emitFunc, function TargetFunction, constructors
 
 		// Always crashing on a nil receiver is not particularly interesting, so emit the code to avoid.
 		// Also avoid nil crash if we have any other pointer parameters.
-		// A user can easliy delete all or part this boilerplate if they don't want particular nil checks.
+		// A user can easily delete all or part this boilerplate if they don't want particular nil checks.
 		emitNilChecks(emit, inputParams, localPkg)
 	case fillRequired:
 		// This is something not yet supported by cmd/go, but we can shim it via go-fuzz-fill-utils.

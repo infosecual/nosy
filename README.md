@@ -17,15 +17,15 @@ Actions:
 
 Example usage:
 	# This will download the target repo
-	go run . --init target_configs/example_source.yaml
+	go run . --init example_source.yaml
 
 	# This will parse the target source and generate
 	# the fuzz harnesses
-	go run . --generate-harness target_configs/example_source.yaml
+	go run . --generate-harness example_source.yaml
 
 	# This will build the fuzzers and begin fuzzing the target
 	# in a docker container
-	go run . --fuzz target_configs/example_source.yaml
+	go run . --fuzz example_source.yaml
 ```
 ## More to come
 Nosy is a work in progress and someday I will update it trophy case and add more info here. Today is not that day. Have fun fuzzing :)
