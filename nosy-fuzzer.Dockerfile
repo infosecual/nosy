@@ -1,4 +1,4 @@
-FROM golang:1.20.3
+FROM golang:1.21.5
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 RUN apt-get install -y vim
