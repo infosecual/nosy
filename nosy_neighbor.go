@@ -88,12 +88,13 @@ func generate_init_script(target_dir string) {
 	script := fmt.Sprintf("REPO_URL=\"%s\"\n", TargetConfig.TargetRepoURL)
 	script += fmt.Sprintf("BRANCH=\"%s\"\n", TargetConfig.TargetRepoBranch)
 	script += fmt.Sprintf("REPO_PREFIX=\"%s\"\n", TargetConfig.TargetRepoImportPrefix)
+	script += fmt.Sprintf("REPO_SUB_DIR=\"%s\"\n", TargetConfig.TargetRepoSubDir)
 	script += `rm /go/src/github/* -rf
 mkdir -p /go/src/$REPO_PREFIX/nosy_fuzz_dir
 mkdir /temp
 git clone -b $BRANCH $REPO_URL /temp
 mv /temp/* /go/src/$REPO_PREFIX
-cd /go/src/$REPO_PREFIX
+cd /go/src/$REPO_PREFIX$REPO_SUB_DIR
 go get -t -d ./...
 cp /go /staging -rp
 # this is an interesting way to get around the fact that we cannot add our
