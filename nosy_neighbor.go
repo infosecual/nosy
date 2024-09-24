@@ -39,21 +39,9 @@ func print_help_menu() {
 
 func generate_harness_gen_script(output_dir string) {
 	script := ""
-
-	// if TargetSubDir exists, we need to cd into it
-	if TargetConfig.TargetRepoSubDir != "" {
-		script += fmt.Sprintf("cd .%s\n", TargetConfig.TargetRepoSubDir)
-
-	}
-
 	script += "go get github.com/infosecual/go-fuzz-fill-utils/fuzzer\n"
 	script += "go get github.com/trailofbits/go-fuzz-utils\n"
 	script += "go get github.com/infosecual/nosy/src/types\n"
-
-	// if TargetSubDir exists then we moved into a dir and need to move back to the root
-	if TargetConfig.TargetRepoSubDir != "" {
-		script += "cd -\n"
-	}
 
 	// add any deps for target package harness_generation
 	for _, dep := range TargetConfig.HarnessGenDeps {
@@ -101,13 +89,12 @@ func generate_init_script(target_dir string) {
 	script := fmt.Sprintf("REPO_URL=\"%s\"\n", TargetConfig.TargetRepoURL)
 	script += fmt.Sprintf("BRANCH=\"%s\"\n", TargetConfig.TargetRepoBranch)
 	script += fmt.Sprintf("REPO_PREFIX=\"%s\"\n", TargetConfig.TargetRepoImportPrefix)
-	script += fmt.Sprintf("REPO_SUB_DIR=\"%s\"\n", TargetConfig.TargetRepoSubDir)
 	script += `rm /go/src/github/* -rf
 mkdir -p /go/src/$REPO_PREFIX/nosy_fuzz_dir
 mkdir /temp
 git clone -b $BRANCH $REPO_URL /temp
 mv /temp/* /go/src/$REPO_PREFIX
-cd /go/src/$REPO_PREFIX$REPO_SUB_DIR
+cd /go/src/$REPO_PREFIX
 go get -t -d ./...
 cp /go /staging -rp
 # this is an interesting way to get around the fact that we cannot add our
