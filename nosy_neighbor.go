@@ -322,7 +322,13 @@ func fuzz() {
 		TargetConfig.TargetRepoImportPrefix)
 
 	// read in function to fuzz
-	file, err := os.Open(local_repo_path + "/" + "fuzzable.txt")
+	fuzzable_txt_path := local_repo_path
+	// if subdir exists add it to the fuzzable.txt path
+	if TargetConfig.TargetRepoSubDir != "" {
+		fuzzable_txt_path += TargetConfig.TargetRepoSubDir
+	}
+	fuzzable_txt_path += "/fuzzable.txt"
+	file, err := os.Open(fuzzable_txt_path)
 	if err != nil {
 		log.Fatal(err)
 	}

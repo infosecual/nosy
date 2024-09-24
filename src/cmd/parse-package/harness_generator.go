@@ -598,6 +598,13 @@ func emitIndependentWrapper(emit emitFunc, function TargetFunction, constructors
 		return fmt.Errorf("%w: %s takes %s", function.Name, unsupportedParam)
 	}
 
+	// handle the case that we somehow missed a generic interface
+	if strings.Contains(wrapperName, "]") || strings.Contains(wrapperName, "[") {
+		// skip this wrapper.
+		emit("// skipping %s as it appears to be an interface: %v\n\n", wrapperName, unsupportedParam)
+		return fmt.Errorf("%w: %s takes %s", function.Name, unsupportedParam)
+	}
+
 	// alternate func name and dir, should fix this later
 	FuzzTargets = append(FuzzTargets, wrapperName)
 	FuzzTargets = append(FuzzTargets, harness_directory)
