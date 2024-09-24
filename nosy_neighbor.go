@@ -38,9 +38,22 @@ func print_help_menu() {
 }
 
 func generate_harness_gen_script(output_dir string) {
-	script := "go get github.com/infosecual/go-fuzz-fill-utils/fuzzer\n"
+	script := ""
+
+	// if TargetSubDir exists, we need to cd into it
+	if TargetConfig.TargetRepoSubDir != "" {
+		script += fmt.Sprintf("cd .%s\n", TargetConfig.TargetRepoSubDir)
+
+	}
+
+	script += "go get github.com/infosecual/go-fuzz-fill-utils/fuzzer\n"
 	script += "go get github.com/trailofbits/go-fuzz-utils\n"
 	script += "go get github.com/infosecual/nosy/src/types\n"
+
+	// if TargetSubDir exists then we moved into a dir and need to move back to the root
+	if TargetConfig.TargetRepoSubDir != "" {
+		script += "cd -\n"
+	}
 
 	// add any deps for target package harness_generation
 	for _, dep := range TargetConfig.HarnessGenDeps {
