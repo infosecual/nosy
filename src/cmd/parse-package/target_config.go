@@ -12,6 +12,7 @@ type TargetRepoConfig struct {
 	TargetRepoURL           string   `yaml:"target_repo_url"`
 	TargetRepoBranch        string   `yaml:"target_repo_branch"`
 	TargetRepoImportPrefix  string   `yaml:"target_repo_import_prefix"`
+	TargetRepoSubDir        string   `yaml:"target_sub_dir"`
 	TargetModuleDeclaration string   `yaml:"target_mod_self_declaration"`
 	TargetGoVersion         string   `yaml:"go_version"`
 	HarnessGenDeps          []string `yaml:"harness_gen_deps"`

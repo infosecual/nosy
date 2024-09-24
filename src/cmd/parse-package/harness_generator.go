@@ -734,13 +734,15 @@ func generate_harnesses() {
 		}
 
 		trimmed_real_path := strings.ReplaceAll(target_package.RealPath, TargetConfig.TargetModuleDeclaration, "")
+
+		// if the targets sub directory is defined remove it from the end of the pwd
+		if TargetConfig.TargetRepoSubDir != "" {
+			trimmed_real_path = strings.ReplaceAll(trimmed_real_path, TargetConfig.TargetRepoSubDir, "")
+		}
+
 		harness_directory := pwd + trimmed_real_path
 
 		outFile := harness_directory + "/Fuzz_Nosy_test.go"
-
-		fmt.Println(target_package.Name)
-		fmt.Println(harness_directory)
-		fmt.Println()
 
 		//relative_path :=
 		//fmt.Println()
@@ -753,11 +755,18 @@ func generate_harnesses() {
 			continue
 		}
 		var adjusted []byte
+
 		abs, err := filepath.Abs(outFile)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "nosy-neighbor: warning: continuing after failing to find abs path:", err)
 			abs = outFile
 		}
+		// print abs and out
+		fmt.Println("")
+		fmt.Println(abs)
+		//fmt.Println(string(out))
+		//fmt.Println("")
+
 		adjusted, err = imports.Process(abs, out, nil)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "nosy-neighbor: warning: continuing after failing to automatically adjust imports:", err)
